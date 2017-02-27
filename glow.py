@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -24,10 +25,16 @@ class MyServer(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header("Content-type", "text/html")
 		self.end_headers()
-		self.wfile.write(bytes("<html><head><title>Title goes here.</title></head>", "utf-8"))
-		self.wfile.write(bytes("<body><p><This is a test.</p>", "utf-8"))
-		self.wfile.write(bytes("<p>You accessed path: %s</p>" % self.path, "utf-8"))
+		self.wfile.write(bytes("<html><head><title>Blinky Lamp</title></head>", "utf-8"))
+		self.wfile.write(bytes("<body><p>Turn Blinky on or off</p>", "utf-8"))
+		self.wfile.write(bytes("<form action='/' method='post'>", "utf-8"))
+		self.wfile.write(bytes("<input type='hidden' value='blue' name='color'>", "utf-8"))
+		self.wfile.write(bytes("<input type='hidden' value='1.0' name='intensity'>", "utf-8"))
+		self.wfile.write(bytes("<input type='submit' value='on' name='state'>", "utf-8"))
+		self.wfile.write(bytes("<input type='submit' value='off' name='state'>", "utf-8"))
 		self.wfile.write(bytes("</body></html>", "utf-8"))
+		self.wfile.write(bytes("</form>", "utf-8"))
+
 	def do_POST(self):
 		ctype, pdict = parse_header(self.headers['content-type'])
 		if ctype == 'multipart/form-data':
@@ -40,6 +47,19 @@ class MyServer(BaseHTTPRequestHandler):
 			self.blinkit(postvars[b"color"][0].decode("utf-8"),postvars[b"intensity"][0].decode("utf-8"),postvars[b"state"][0].decode("utf-8"))
 		else:
 			postvars = {}
+		self.send_response(200)
+		self.send_header("Content-type", "text/html")
+		self.end_headers()
+		self.wfile.write(bytes("<html><head><title>Blinky Lamp is </title></head>", "utf-8"))
+		self.wfile.write(bytes("<body><p>Turn Blinky on or off</p>", "utf-8"))
+		self.wfile.write(bytes("<form action='/' method='post'>", "utf-8"))
+		self.wfile.write(bytes("<input type='hidden' value='blue' name='color'>", "utf-8"))
+		self.wfile.write(bytes("<input type='hidden' value='1.0' name='intensity'>", "utf-8"))
+		self.wfile.write(bytes("<input type='submit' value='on' name='state'>", "utf-8"))
+		self.wfile.write(bytes("<input type='submit' value='off' name='state'>", "utf-8"))
+		self.wfile.write(bytes("</body></html>", "utf-8"))
+		self.wfile.write(bytes("</form>", "utf-8"))
+
 
 	def make_gaussian(self, fwhm):
 		x = np.arange(0, 8, 1, float)
